@@ -1,0 +1,9 @@
+*.iml
+.gradle
+twitter4j.properties
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
