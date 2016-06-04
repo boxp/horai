@@ -29,11 +29,7 @@ public class Tweet implements Observable.OnSubscribe<Status>{
         String consumerKey = context.getString(R.string.twitter_consumerkey);
         String consumerSecret = context.getString(R.string.twitter_consumersecret);
         mTwitterStream = TwitterStreamFactory.getSingleton();
-        try {
-            mTwitterStream.setOAuthConsumer(consumerKey, consumerSecret);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
+        mTwitterStream.setOAuthConsumer(consumerKey, consumerSecret);
         mTwitterStream.setOAuthAccessToken(getAccessToken(context));
     }
 
@@ -43,13 +39,13 @@ public class Tweet implements Observable.OnSubscribe<Status>{
         mSubscriber.add(Subscriptions.create(new Action0() {
             @Override
             public void call() {
-                mTwitterStream.clearListeners();
-                mTwitterStream.shutdown();
-                mTwitterStream = null;
+                //mTwitterStream.clearListeners();
+                //mTwitterStream.shutdown();
+                //mTwitterStream = null;
             }
         }));
         mTwitterStream.addListener(new TweetListener());
-        mTwitterStream.sample();
+        mTwitterStream.user();
     }
 
     public class TweetListener implements StatusListener {
@@ -86,8 +82,10 @@ public class Tweet implements Observable.OnSubscribe<Status>{
 
     public AccessToken getAccessToken(Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        String token = sp.getString(context.getString(R.string.twitter_accesstoken), null);
-        String secret = sp.getString(context.getString(R.string.twitter_accesstokensecret), null);
+        //String token = sp.getString(context.getString(R.string.twitter_accesstoken), null);
+        //String secret = sp.getString(context.getString(R.string.twitter_accesstokensecret), null);
+        String token = context.getString(R.string.twitter_accesstoken);
+        String secret = context.getString(R.string.twitter_accesstokensecret);
 
         if (token != null && secret != null) {
             return new AccessToken(token, secret);

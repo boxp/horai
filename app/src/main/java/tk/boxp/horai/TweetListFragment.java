@@ -31,9 +31,9 @@ public class TweetListFragment extends ListFragment {
 
     private Tweet mTweet;
 
-    private List<Status> mStatuses = null;
+    private ArrayList<Status> mStatuses = null;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeSubscription mSubscriptions = new CompositeSubscription();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class TweetListFragment extends ListFragment {
         return view;
     }
 
-    Override
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -76,8 +76,12 @@ public class TweetListFragment extends ListFragment {
                         mCardViewAdapter.notifyDataSetChanged();
                     }
                 }));
-        mSubscriptions.unsubscribe();
         setListAdapter(mCardViewAdapter);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSubscriptions.unsubscribe();
+    }
 }

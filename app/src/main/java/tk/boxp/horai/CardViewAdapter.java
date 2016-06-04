@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import twitter4j.Status;
@@ -20,8 +22,8 @@ public class CardViewAdapter extends ArrayAdapter<Status> {
 
     private Context mContext;
 
-    public CardViewAdapter(Context context, List<Status> list) {
-        super(context, 0, list);
+    public CardViewAdapter(Context context, ArrayList<Status> list) {
+        super(context, R.id.cardView, list);
         mContext = context;
     }
 
