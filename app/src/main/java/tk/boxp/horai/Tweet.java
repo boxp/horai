@@ -3,6 +3,7 @@ package tk.boxp.horai;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -39,9 +40,9 @@ public class Tweet implements Observable.OnSubscribe<Status>{
         mSubscriber.add(Subscriptions.create(new Action0() {
             @Override
             public void call() {
-                //mTwitterStream.clearListeners();
-                //mTwitterStream.shutdown();
-                //mTwitterStream = null;
+                mTwitterStream.clearListeners();
+                mTwitterStream.shutdown();
+                mTwitterStream = null;
             }
         }));
         mTwitterStream.addListener(new TweetListener());

@@ -1,10 +1,14 @@
 package tk.boxp.horai;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.ListViewAutoScrollHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +27,7 @@ import twitter4j.conf.ConfigurationBuilder;
 /**
  * Created by boxp on 16/05/14.
  */
-public class TweetListFragment extends ListFragment {
+public class TweetListFragment extends Fragment {
 
     private Twitter mTwitter;
 
@@ -43,6 +47,7 @@ public class TweetListFragment extends ListFragment {
         mTweet = new Tweet(getActivity());
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        ListView listView = (ListView)view.findViewById(R.id.tweet_list);
         //OAuthの設定
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 
@@ -54,8 +59,23 @@ public class TweetListFragment extends ListFragment {
         Configuration conf = configurationBuilder.build();
 
         // Twitterオブジェクトの生成
-        mTwitter = new TwitterFactory(conf).getInstance();
+        this.mTwitter = new TwitterFactory(conf).getInstance();
         //TODO OAuth
+
+        this.mCardViewAdapter = new CardViewAdapter(getActivity(), mStatuses);
+
+        listView.setAdapter(mCardViewAdapter);
+        this.mSubscriptions.add(Observable.create(mTweet)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Status>() {
+                    @Override
+                    public void call(Status status) {
+                        Log.d(TweetListFragment.class.getSimpleName(), status.getURLEntities().toString());
+                        mStatuses.add(0, status);
+                        mCardViewAdapter.notifyDataSetChanged();
+                    }
+                }));
 
         return view;
     }
@@ -64,19 +84,6 @@ public class TweetListFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mCardViewAdapter = new CardViewAdapter(getActivity(), mStatuses);
-
-        mSubscriptions.add(Observable.create(mTweet)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Status>() {
-                    @Override
-                    public void call(Status status) {
-                        mStatuses.add(status);
-                        mCardViewAdapter.notifyDataSetChanged();
-                    }
-                }));
-        setListAdapter(mCardViewAdapter);
     }
 
     @Override
