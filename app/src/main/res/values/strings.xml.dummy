@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">horai</string>
-    <string name="action_settings">Settings</string>
-    <string name="twitter_consumerkey">DUMMY_CONSUMERKEY</string>
-    <string name="twitter_consumersecret">DUMMY_CONSUMERSECRET</string>
-    <string name="twitter_accesstoken">DUMMY_TOKEN</string>
-    <string name="twitter_accesstokensecret">DUMMY_TOKENSECRET</string>
-</resources>
