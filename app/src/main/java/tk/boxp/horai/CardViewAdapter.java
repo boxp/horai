@@ -48,7 +48,7 @@ public class CardViewAdapter extends ArrayAdapter<Status> {
         Status status = getItem(position);
         final User user = status.getUser();
         final String profileImgUrl = user.getBiggerProfileImageURL();
-        final String name = user.getScreenName();
+        final String name = "@" + user.getScreenName();
         final String date = status.getCreatedAt().toString();
         final String text = status.getText();
         final MediaEntity[] medias = status.getMediaEntities();

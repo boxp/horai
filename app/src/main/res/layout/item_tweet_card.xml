@@ -4,11 +4,12 @@
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="78dp"
-        card_view:cardCornerRadius="4dp"
+        card_view:cardCornerRadius="0dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
-        android:id="@+id/cardView">
+        android:id="@+id/cardView"
+        android:background="@android:color/darker_gray">
 
     <!-- カードに載せる情報 -->
 
@@ -16,55 +17,60 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:id="@+id/cardRelative">
+            android:id="@+id/cardRelative"
+            android:background="@android:color/background_dark"
+        android:paddingBottom="10dp">
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/user">
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:contentDescription=""
                 android:id="@+id/profileImg"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="13sp"
                 android:id="@+id/nameBox"
                 android:layout_toRightOf="@+id/profileImg"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_alignTop="@+id/profileImg" />
+                android:textColor="@android:color/secondary_text_dark"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:layout_marginTop="5dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="13sp"
                 android:id="@+id/dateBox"
-                android:layout_toRightOf="@+id/profileImg"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_alignBottom="@+id/profileImg"
-                android:textIsSelectable="false" />
-        </RelativeLayout>
+                android:textIsSelectable="false"
+                android:layout_below="@+id/nameBox"
+                android:layout_alignLeft="@+id/nameBox"
+                android:textColor="@android:color/secondary_text_dark"
+                android:paddingLeft="10dp" />
 
-        <TextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="CardView"
                 android:id="@+id/textBox"
-                android:textSize="15sp"
-                android:layout_marginLeft="17dp"
-                android:layout_marginStart="17dp"
-            android:layout_below="@+id/user"
-            android:enabled="false" />
+                android:textSize="14sp"
+                android:layout_below="@+id/dateBox"
+                android:enabled="false"
+                android:textColor="@android:color/primary_text_dark"
+                android:layout_alignLeft="@+id/dateBox"
+                android:paddingLeft="10dp" />
+        </RelativeLayout>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tweetImg"
-            android:layout_below="@+id/textBox" />
+            android:layout_below="@+id/user"
+            android:contentDescription="tweetImg"
+            android:paddingTop="5dp" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

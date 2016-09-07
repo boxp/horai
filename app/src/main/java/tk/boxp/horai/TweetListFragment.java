@@ -39,15 +39,11 @@ public class TweetListFragment extends Fragment {
 
     private CompositeSubscription mSubscriptions = new CompositeSubscription();
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        mStatuses = new ArrayList<>();
-        mTweet = new Tweet(getActivity());
-
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ListView listView = (ListView)view.findViewById(R.id.tweet_list);
         //OAuthの設定
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 
@@ -62,7 +58,18 @@ public class TweetListFragment extends Fragment {
         this.mTwitter = new TwitterFactory(conf).getInstance();
         //TODO OAuth
 
+        mStatuses = new ArrayList<>();
+        mTweet = new Tweet(getActivity());
+
         this.mCardViewAdapter = new CardViewAdapter(getActivity(), mStatuses);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        ListView listView = (ListView)view.findViewById(R.id.tweet_list);
 
         listView.setAdapter(mCardViewAdapter);
         this.mSubscriptions.add(Observable.create(mTweet)
@@ -83,7 +90,6 @@ public class TweetListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override

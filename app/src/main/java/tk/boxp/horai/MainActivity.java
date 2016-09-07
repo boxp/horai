@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
 
         Fragment fragment = new TweetListFragment();
+        fragment.setRetainInstance(true);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
