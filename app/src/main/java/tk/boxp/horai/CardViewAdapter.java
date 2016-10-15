@@ -2,12 +2,15 @@ package tk.boxp.horai;
 
 import android.content.Context;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
@@ -15,6 +18,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import twitter4j.ExtendedMediaEntity;
 import twitter4j.MediaEntity;
 import twitter4j.Status;
 import twitter4j.User;
@@ -51,7 +55,7 @@ public class CardViewAdapter extends ArrayAdapter<Status> {
         final String name = "@" + user.getScreenName();
         final String date = status.getCreatedAt().toString();
         final String text = status.getText();
-        final MediaEntity[] medias = status.getMediaEntities();
+        final ExtendedMediaEntity[] medias = status.getExtendedMediaEntities();
 
         // プロファイル画像の設定
         Picasso.with(ctx).load(profileImgUrl).into(holder.profileImg);
@@ -63,25 +67,38 @@ public class CardViewAdapter extends ArrayAdapter<Status> {
         return convertView;
     }
 
-    // tweetImgにメディアを設定するサブルーチン
-    private void setTweetImage(Context ctx, MediaEntity[] medias, ViewHolder holder) {
+    // tweetImg にメディアを設定するサブルーチン
+    private void setTweetImage(Context ctx, ExtendedMediaEntity[] medias, ViewHolder holder) {
         if (medias.length > 0) {
-            MediaEntity media = medias[0];
+            ExtendedMediaEntity media = medias[0];
 
-            holder.tweetImg.setVisibility(View.VISIBLE);
+            Log.d(CardViewAdapter.class.getSimpleName(), media.getType());
 
             switch (media.getType()) {
                 case "photo":
-                    Picasso.with(getContext()).load(media.getMediaURL()).into(holder.tweetImg);
+                    String mediaURL = media.getMediaURLHttps();
+
+                    holder.tweetImg.setVisibility(View.VISIBLE);
+                    holder.tweetVideo.setVisibility(View.GONE);
+                    Picasso.with(getContext()).load(mediaURL).into(holder.tweetImg);
+                    Log.d(CardViewAdapter.class.getSimpleName(), mediaURL);
                     break;
+                case "video":
                 case "animated_gif":
-                    GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(holder.tweetImg);
-                    Glide.with(ctx).load(media.getMediaURL()).into(target);
+                    String videoURL = media.getVideoVariants()[0].getUrl();
+
+                    holder.tweetImg.setVisibility(View.GONE);
+                    holder.tweetVideo.setVisibility(View.VISIBLE);
+                    holder.tweetVideo.setVideoURI(Uri.parse(videoURL));
+                    holder.tweetVideo.start();
+                    Log.d(CardViewAdapter.class.getSimpleName(), videoURL);
+                    Log.d(CardViewAdapter.class.getSimpleName(), String.valueOf(holder.tweetVideo.isPlaying()));
                     break;
             }
         } else {
-            // tweetImgを非表示に
+            // tweetImg, tweetVideo を非表示に
             holder.tweetImg.setVisibility(View.GONE);
+            holder.tweetVideo.setVisibility(View.GONE);
         }
     }
 
@@ -96,6 +113,8 @@ public class CardViewAdapter extends ArrayAdapter<Status> {
         TextView nameBox;
         TextView dateBox;
         ImageView tweetImg;
+        VideoView tweetVideo;
+
 
         public ViewHolder(View view) {
             cardView = (CardView) view.findViewById(R.id.cardView);
@@ -104,6 +123,7 @@ public class CardViewAdapter extends ArrayAdapter<Status> {
             nameBox = (TextView) view.findViewById(R.id.nameBox);
             dateBox = (TextView) view.findViewById(R.id.dateBox);
             tweetImg = (ImageView) view.findViewById(R.id.tweetImg);
+            tweetVideo = (VideoView) view.findViewById(R.id.tweetVideo);
         }
     }
 }

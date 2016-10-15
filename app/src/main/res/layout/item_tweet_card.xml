@@ -59,7 +59,7 @@
                 android:textSize="14sp"
                 android:layout_below="@+id/dateBox"
                 android:enabled="false"
-                android:textColor="@android:color/primary_text_dark"
+                android:textColor="@android:color/secondary_text_dark"
                 android:layout_alignLeft="@+id/dateBox"
                 android:paddingLeft="10dp" />
         </RelativeLayout>
@@ -70,6 +70,13 @@
             android:id="@+id/tweetImg"
             android:layout_below="@+id/user"
             android:contentDescription="tweetImg"
+            android:paddingTop="5dp" />
+
+        <VideoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tweetVideo"
+            android:layout_below="@+id/user"
             android:paddingTop="5dp" />
 
     </RelativeLayout>

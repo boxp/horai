@@ -2,6 +2,8 @@ package tk.boxp.horai;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -26,9 +28,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        Fragment fragment = new TweetListFragment();
-        fragment.setRetainInstance(true);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        // Fragment 管理
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // Fragment が存在しない場合追加する
+        if (fragmentManager.findFragmentById(R.id.container) != null) {
+            FragmentTransaction tx = fragmentManager.beginTransaction();
+
+            Fragment fragment = new TweetListFragment();
+            tx.add(R.id.container, fragment);
+            tx.commit();
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

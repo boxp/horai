@@ -62,6 +62,9 @@ public class TweetListFragment extends Fragment {
         mTweet = new Tweet(getActivity());
 
         this.mCardViewAdapter = new CardViewAdapter(getActivity(), mStatuses);
+
+        // fragment 再生成禁止
+        setRetainInstance(true);
     }
 
     @Override
@@ -70,15 +73,19 @@ public class TweetListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ListView listView = (ListView)view.findViewById(R.id.tweet_list);
-
         listView.setAdapter(mCardViewAdapter);
+
+        // 既に mSubscriptions が空でなければ何もしない
+        if(mSubscriptions.hasSubscriptions()) {
+            return view;
+        }
+
         this.mSubscriptions.add(Observable.create(mTweet)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Status>() {
                     @Override
                     public void call(Status status) {
-                        Log.d(TweetListFragment.class.getSimpleName(), status.getURLEntities().toString());
                         mStatuses.add(0, status);
                         mCardViewAdapter.notifyDataSetChanged();
                     }
